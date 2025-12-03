@@ -47,11 +47,14 @@ class Server:
         assert isinstance(page_size, int) and page_size > 0
 
         indexed_data = self.indexed_dataset()
+        assert index < len(indexed_data), "Index out of range"
+    
         data = []
         current_index = index
         collected = 0
+        max_index = max(indexed_data.keys())
 
-        while collected < page_size:
+        while collected < page_size and current_index <= max_index:
             if current_index in indexed_data:
                 data.append(indexed_data[current_index])
                 collected += 1
@@ -62,6 +65,6 @@ class Server:
         return {
             'index': index,
             'next_index': next_index,
-            'page_size': page_size,
+            'page_size':len(data),
             'data': data
         }
